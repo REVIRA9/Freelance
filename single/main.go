@@ -97,21 +97,81 @@ func ReadData(A tabTrack, n int){
 
 func UbahData(A *tabTrack, n int){
 	var nama string
-	fmt.Print("Masukkan nama proyek yang ingin diubah statusnya pengerjaannya: ")
+	fmt.Print("Masukkan nama proyek yang ingin diubah statusnya: ")
 	fmt.Scan(&nama)
 
 	found := false
 	for i := 0; i < n; i++ {
-		if strings.EqualFold(A[i].proyek, nama) {
-			fmt.Printf("Status saat ini: %s\n", A[i].status)
-			fmt.Print("Masukkan status baru: ")
-			fmt.Scan(&A[i].status) 
-			fmt.Println("✅ Status berhasil diperbarui.")
-			found = true
-			break
+		if len(nama) == len(A[i].proyek) {
+			sama := true
+			for j := 0; j < len(nama); j++ {
+				a := nama[j]
+				b := A[i].proyek[j]
+				if a >= 'A' && a <= 'Z' {
+					a += 64
+				}
+				if b >= 'A' && b <= 'Z' {
+					b += 64
+				}
+				if a != b {
+					sama = false
+					break
+				}
+			}
+			if sama {
+				fmt.Printf("Status saat ini: %s\n", A[i].status)
+				fmt.Print("Masukkan status baru: ")
+				fmt.Scan(&A[i].status)
+				fmt.Println("Status proyek telah diperbarui.")
+				found = true
+				break
+			}
 		}
 	}
 	if !found {
-		fmt.Println("❌ Proyek tidak ditemukan.")
+		fmt.Println("Proyek tidak ditemukan.")
 	}
 }
+
+func hapusData(A *tabTrack, n *int) {
+	var nama string
+	fmt.Print("Masukkan nama proyek yang ingin dihapus: ")
+	fmt.Scan(&nama)
+
+	for i := 0; i < *n; i++ {
+		match := true
+		if len(nama) != len(A[i].proyek) {
+			match = false
+		} else {
+			for j := 0; j < len(nama); j++ {
+				a := nama[j]
+				b := A[i].proyek[j]
+
+				if a >= 'A' && a <= 'Z' {
+					a += 32
+				}
+				if b >= 'A' && b <= 'Z' {
+					b += 32
+				}
+				if a != b {
+					match = false
+					break
+				}
+			}
+		}
+
+		if match {
+			
+			for j := i; j < *n-1; j++ {
+				A[j] = A[j+1]
+			}
+			*n--
+			fmt.Println("Proyek telah berhasil dihapus.")
+			return
+		}
+	}
+
+	fmt.Println("Proyek tidak ditemukan.")
+}
+
+
