@@ -96,5 +96,22 @@ func ReadData(A tabTrack, n int){
 }
 
 func UbahData(A *tabTrack, n int){
+	var nama string
+	fmt.Print("Masukkan nama proyek yang ingin diubah statusnya pengerjaannya: ")
+	fmt.Scan(&nama)
 
+	found := false
+	for i := 0; i < n; i++ {
+		if strings.EqualFold(A[i].proyek, nama) {
+			fmt.Printf("Status saat ini: %s\n", A[i].status)
+			fmt.Print("Masukkan status baru: ")
+			fmt.Scan(&A[i].status) 
+			fmt.Println("✅ Status berhasil diperbarui.")
+			found = true
+			break
+		}
+	}
+	if !found {
+		fmt.Println("❌ Proyek tidak ditemukan.")
+	}
 }
