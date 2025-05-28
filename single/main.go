@@ -2,34 +2,16 @@ package main
 
 import "fmt"
 
-const NMAX int = 3
+const NMAX int = 10
 
 type tracking struct {
-	proyek        string
+	proyek       string
 	klien, status string
 	deadlineDay, deadlineMonth, deadlineYear int
-	bayaran int
+	bayaran      int
 }
 
 type tabTrack [NMAX]tracking
-
-func main(){
-	var Data tabTrack
-	var nData int
-	var Option int
-
-	for Option != 9{
-		Menu()
-		fmt.Print("Masukan Opsi: ")
-		fmt.Scan(&Option)
-		switch Option{
-		case 1: InputData(&Data, &nData)
-		case 2:	ReadData(Data, nData)
-		case 9: fmt.Println("Program Selesai")
-		default : fmt.Println("Opsi tidak valid, silahkan masukan ulang opsi: ")
-		}
-	}
-}
 
 func Menu(){
 	fmt.Println("===============================================")
@@ -43,6 +25,54 @@ func Menu(){
 	fmt.Println("| 6. Urutkan Proyek (Deadline / Bayaran)      |")
 	fmt.Println("| 9. Keluar                                   |")
 	fmt.Println("===============================================")
+}
+
+func main() {
+	var Data tabTrack
+	var nData int
+	var Pilihan int
+	var jumlahItemTerbaca int
+
+	for Pilihan != 7 {
+		Menu()
+		fmt.Print(">> Pilihanmu (angka): ")
+		
+		jumlahItemTerbaca, _ = fmt.Scan(&Pilihan)
+
+		if jumlahItemTerbaca == 0 {
+			fmt.Println("Waduh, kayaknya yang kamu masukin bukan angka deh. Coba lagi ya.")
+			var SisaInputSalah string
+			fmt.Scanln(&SisaInputSalah) 
+			Pilihan = 0 
+		} else {
+			fmt.Println()
+
+			switch Pilihan {
+			case 1:
+				InputData(&Data, &nData)
+			case 2:
+				ReadData(Data, nData)
+			case 3:
+				UbahData(&Data, nData)
+			case 4:
+				hapusData(&Data, &nData)
+			case 5:
+				CariProyek(Data, nData)
+			case 6:
+				UrutkanProyek(&Data, &nData)
+			case 7:
+				fmt.Println("Cukup? Makasih Udah Pake Ya Bree")
+			default:
+				if Pilihan != 7 {
+					fmt.Println("Gaada di menu nih, coba yang lain")
+				}
+			}
+
+			if Pilihan != 7 {
+				fmt.Println()
+			}
+		}
+	}
 }
 
 func InputData(A *tabTrack, n *int){
@@ -340,12 +370,12 @@ func cekUrut(p1, p2 tracking) bool {
 	}
 }
 
-func UrutkanProyek(A *tabTrack, n int) {
-	if n == 0 {
+func UrutkanProyek(A *tabTrack, n *int) {
+	if *n == 0 {
 		fmt.Println("Proyek masih kosong")
 		return
 	}
-	if n == 1 {
+	if *n == 1 {
 		fmt.Println("Cuman ada satu proyek, belum bisa di urutin")
 		return
 	}
@@ -363,17 +393,17 @@ func UrutkanProyek(A *tabTrack, n int) {
 	fmt.Print("Pilih urutan (1-2): ")
 	fmt.Scan(&pilihanUrutan)
 	
-	for i := 0; i < n-1; i++ {
+	for i := 0; i < *n-1; i++ {
 		indeksPilihan := i
 		
-		for j := i + 1; j < n; j++ {
+		for j := i + 1; j < *n; j++ {
 			JDulu := false
 
 			if pilihanKriteria == 1 {
 				if pilihanUrutan == 1 {
-					JDulu = isD1SebelumD2(A[j], A[indeksPilihan])
+					JDulu = cekUrut(A[j], A[indeksPilihan])
 				} else {
-					JDulu = isD1SebelumD2(A[indeksPilihan], A[j])
+					JDulu = cekUrut(A[indeksPilihan], A[j])
 				}
 			} else {
 				if pilihanUrutan == 1 {
@@ -394,5 +424,5 @@ func UrutkanProyek(A *tabTrack, n int) {
 	}
 
 	fmt.Println("\nData proyek berhasil diurutkan!")
-	ReadData(*A, n) 
+	ReadData(*A, *n) 
 }
