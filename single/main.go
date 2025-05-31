@@ -20,18 +20,25 @@ func main(){
 	var nData int
 	var Option int
 
-	for Option != 9{
+	for Option != 7{
 		Menu()
 		fmt.Print("Masukan Opsi: ")
 		fmt.Scan(&Option)
 		switch Option{
-		case 1: InputData(&Data, &nData)
-		case 2:	ReadData(Data, nData)
-		case 3: UpdateStatus(&Data, nData)
-		case 4: hapusData(&Data, &nData)
-		case 5: CariProyek(Data, nData)
-		case 6: UrutkanProyek(&Data, &nData)
-		case 9: fmt.Println("Program Selesai")
+		case 1: 
+			InputData(&Data, &nData)
+		case 2:
+			ReadData(Data, nData)
+		case 3:
+			 UpdateStatus(&Data, nData)
+		case 4:
+			 hapusData(&Data, &nData)
+		case 5:
+			 CariProyek(Data, nData)
+		case 6:
+			 UrutkanProyek(&Data, &nData)
+		case 7:
+			 fmt.Println("Program Selesai")
 		default : fmt.Println("Opsi tidak valid, silahkan masukan ulang opsi: ")
 		}
 	}
@@ -47,7 +54,7 @@ func Menu(){
 	fmt.Println("| 4. Hapus Proyek                             |")
 	fmt.Println("| 5. Cari Proyek (Sequential / Binary Search) |")
 	fmt.Println("| 6. Urutkan Proyek (Deadline / Bayaran)      |")
-	fmt.Println("| 9. Keluar                                   |")
+	fmt.Println("| 7. Keluar                                   |")
 	fmt.Println("===============================================")
 }
 
@@ -76,6 +83,9 @@ func InputData(A *tabTrack, n *int){
 
 			fmt.Print("📆 Deadline (dd mm yyyy): ")
 			fmt.Scan(&A[inputLama].deadlineDay, &A[inputLama].deadlineMonth, &A[inputLama].deadlineYear)
+
+			fmt.Print("Masukan Bayaran: Rp")
+			fmt.Scan(&A[inputLama].bayaran)
 		inputLama++
 	}
 	*n = inputBaru
@@ -93,11 +103,11 @@ func ReadData(A tabTrack, n int){
 	fmt.Println("=============================================================================================================")
 	fmt.Println("|                                 APLIKASI TRACKING FREELANCE                                               |")
 	fmt.Println("=============================================================================================================")	
-	fmt.Printf("| %-3s | %-20s | %-15s | %-18s | %-12s | %-8s |\n", "No", "Nama Proyek", "Nama Klien", "Status", "Deadline", "Bayaran")
+	fmt.Printf("| %-3s | %-20s | %-15s | %-18s | %-12s | %-22s |\n", "No", "Nama Proyek", "Nama Klien", "Status", "Deadline", "Bayaran")
 	fmt.Println("=============================================================================================================")
 	j:=1
 	for i:=0;i<n;i++{
-		fmt.Printf("| %-3d | %-20s | %-15s | %-18s | %02d-%02d-%04d   |\n",j , A[i].proyek, A[i].klien, A[i].status,  A[i].deadlineDay, A[i].deadlineMonth, A[i].deadlineYear)
+		fmt.Printf("| %-3d | %-20s | %-15s | %-18s | %02d-%02d-%04d   | Rp%-21d|\n",j , A[i].proyek, A[i].klien, A[i].status,  A[i].deadlineDay, A[i].deadlineMonth, A[i].deadlineYear, A[i].bayaran)
 		j++
 	}
 	fmt.Println("=============================================================================================================")
@@ -196,7 +206,7 @@ func hapusData(A *tabTrack, n *int) {
 func CariProyek(DaftarProyek tabTrack, jumlahProyek int) {
 	if jumlahProyek == 0 {
 		fmt.Println("Belum ada proyek nih")
-		return
+		return	
 	}
 
 	var namaProyekDicari string
