@@ -1,17 +1,41 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 const NMAX int = 10
 
 type tracking struct {
-	proyek       string
+	proyek        string
 	klien, status string
 	deadlineDay, deadlineMonth, deadlineYear int
-	bayaran      int
+	bayaran int
 }
 
 type tabTrack [NMAX]tracking
+
+func main(){
+	var Data tabTrack
+	var nData int
+	var Option int
+
+	for Option != 9{
+		Menu()
+		fmt.Print("Masukan Opsi: ")
+		fmt.Scan(&Option)
+		switch Option{
+		case 1: InputData(&Data, &nData)
+		case 2:	ReadData(Data, nData)
+		case 3: UpdateStatus(&Data, nData)
+		case 4: hapusData(&Data, &nData)
+		case 5: CariProyek(Data, nData)
+		case 6: UrutkanProyek(&Data, &nData)
+		case 9: fmt.Println("Program Selesai")
+		default : fmt.Println("Opsi tidak valid, silahkan masukan ulang opsi: ")
+		}
+	}
+}
 
 func Menu(){
 	fmt.Println("===============================================")
@@ -25,54 +49,6 @@ func Menu(){
 	fmt.Println("| 6. Urutkan Proyek (Deadline / Bayaran)      |")
 	fmt.Println("| 9. Keluar                                   |")
 	fmt.Println("===============================================")
-}
-
-func main() {
-	var Data tabTrack
-	var nData int
-	var Pilihan int
-	var jumlahItemTerbaca int
-
-	for Pilihan != 7 {
-		Menu()
-		fmt.Print(">> Pilihanmu (angka): ")
-		
-		jumlahItemTerbaca, _ = fmt.Scan(&Pilihan)
-
-		if jumlahItemTerbaca == 0 {
-			fmt.Println("Waduh, kayaknya yang kamu masukin bukan angka deh. Coba lagi ya.")
-			var SisaInputSalah string
-			fmt.Scanln(&SisaInputSalah) 
-			Pilihan = 0 
-		} else {
-			fmt.Println()
-
-			switch Pilihan {
-			case 1:
-				InputData(&Data, &nData)
-			case 2:
-				ReadData(Data, nData)
-			case 3:
-				UbahData(&Data, nData)
-			case 4:
-				hapusData(&Data, &nData)
-			case 5:
-				CariProyek(Data, nData)
-			case 6:
-				UrutkanProyek(&Data, &nData)
-			case 7:
-				fmt.Println("Cukup? Makasih Udah Pake Ya Bree")
-			default:
-				if Pilihan != 7 {
-					fmt.Println("Gaada di menu nih, coba yang lain")
-				}
-			}
-
-			if Pilihan != 7 {
-				fmt.Println()
-			}
-		}
-	}
 }
 
 func InputData(A *tabTrack, n *int){
@@ -103,76 +79,84 @@ func InputData(A *tabTrack, n *int){
 		inputLama++
 	}
 	*n = inputBaru
-	fmt.Println("✅ Data proyek berhasil ditambahkan.")
+	fmt.Println("✅ Data proyek berhasil ditambahkan.\n\n")
 	} else{
-		fmt.Println("INPUTAN MELEBIHI KAPASITAS DATA❗❗")		
+		fmt.Println("INPUTAN MELEBIHI KAPASITAS DATA❗❗\n\n")		
 		}	
 	} else {
-		fmt.Println("DATA PROYEK SUDAH PENUH❗❗")	
+		fmt.Println("DATA PROYEK SUDAH PENUH❗❗\n\n")	
 	}
 
 }
 
 func ReadData(A tabTrack, n int){
-	fmt.Println("==========================================================================================")
-	fmt.Printf("| %-3s | %-20s | %-15s | %-10s | %-12s | %-8s |\n", "No", "Nama Proyek", "Nama Klien", "Status", "Deadline", "Bayaran")
-	fmt.Println("==========================================================================================")
+	fmt.Println("=============================================================================================================")
+	fmt.Println("|                                 APLIKASI TRACKING FREELANCE                                               |")
+	fmt.Println("=============================================================================================================")	
+	fmt.Printf("| %-3s | %-20s | %-15s | %-18s | %-12s | %-8s |\n", "No", "Nama Proyek", "Nama Klien", "Status", "Deadline", "Bayaran")
+	fmt.Println("=============================================================================================================")
 	j:=1
 	for i:=0;i<n;i++{
-		fmt.Printf("| %-3d | %-20s | %-15s | %-10s | %d-%d-%-8d |\n",j , A[i].proyek, A[i].klien, A[i].status,  A[i].deadlineDay, A[i].deadlineMonth, A[i].deadlineYear)
+		fmt.Printf("| %-3d | %-20s | %-15s | %-18s | %02d-%02d-%04d   |\n",j , A[i].proyek, A[i].klien, A[i].status,  A[i].deadlineDay, A[i].deadlineMonth, A[i].deadlineYear)
 		j++
 	}
-	fmt.Println("==========================================================================================")
+	fmt.Println("=============================================================================================================")
 }
 
-func UbahData(A *tabTrack, n int){
+func UpdateStatus(A *tabTrack, n int) {
 	var nama string
 	fmt.Print("Masukkan nama proyek yang ingin diubah statusnya: ")
 	fmt.Scan(&nama)
 
 	found := false
+
 	for i := 0; i < n; i++ {
-		if len(nama) == len(A[i].proyek) {
+		if !found && len(nama) == len(A[i].proyek) {
 			sama := true
 			for j := 0; j < len(nama); j++ {
 				a := nama[j]
 				b := A[i].proyek[j]
+
 				if a >= 'A' && a <= 'Z' {
-					a += 64
+					a += 32 
 				}
 				if b >= 'A' && b <= 'Z' {
-					b += 64
+					b += 32
 				}
+
 				if a != b {
 					sama = false
-					break
 				}
 			}
+
 			if sama {
 				fmt.Printf("Status saat ini: %s\n", A[i].status)
 				fmt.Print("Masukkan status baru: ")
 				fmt.Scan(&A[i].status)
-				fmt.Println("Status proyek telah diperbarui.")
+				fmt.Println("✅ Status proyek telah diperbarui.")
 				found = true
-				break
 			}
 		}
 	}
+
 	if !found {
-		fmt.Println("Proyek tidak ditemukan.")
+		fmt.Println("❌ Proyek tidak ditemukan.")
 	}
 }
+
+
 
 func hapusData(A *tabTrack, n *int) {
 	var nama string
 	fmt.Print("Masukkan nama proyek yang ingin dihapus: ")
 	fmt.Scan(&nama)
 
+	indeksDihapus := -1
+
 	for i := 0; i < *n; i++ {
 		match := true
-		if len(nama) != len(A[i].proyek) {
-			match = false
-		} else {
+
+		if len(nama) == len(A[i].proyek) {
 			for j := 0; j < len(nama); j++ {
 				a := nama[j]
 				b := A[i].proyek[j]
@@ -185,24 +169,29 @@ func hapusData(A *tabTrack, n *int) {
 				}
 				if a != b {
 					match = false
-					break
 				}
 			}
+		} else {
+			match = false
 		}
 
-		if match {
-			
-			for j := i; j < *n-1; j++ {
-				A[j] = A[j+1]
-			}
-			*n--
-			fmt.Println("Proyek telah berhasil dihapus.")
-			return
+		if indeksDihapus == -1 && match {
+			indeksDihapus = i
 		}
 	}
 
-	fmt.Println("Proyek tidak ditemukan.")
+	if indeksDihapus != -1 {
+		for j := indeksDihapus; j < *n-1; j++ {
+			A[j] = A[j+1]
+		}
+		*n--
+		fmt.Println("✅ Proyek telah berhasil dihapus.")
+	} else {
+		fmt.Println("❌ Proyek tidak ditemukan.")
+	}
 }
+
+
 
 func CariProyek(DaftarProyek tabTrack, jumlahProyek int) {
 	if jumlahProyek == 0 {
