@@ -59,7 +59,7 @@ func Menu(){
 }
 
 func InputData(A *tabTrack, n *int){
-	var inputBaru, inputLama int
+	var inputBaru, inputLama, status int
 	if *n < NMAX{
 	fmt.Print("Masukan Jumlah Proyek yang ingin di input: ")
 	fmt.Scan(&inputBaru)
@@ -78,16 +78,35 @@ func InputData(A *tabTrack, n *int){
 			fmt.Print("👤 Nama Klien    : ")
 			fmt.Scan(&A[inputLama].klien)
 
-			fmt.Print("📍 Status        : ")
-			fmt.Scan(&A[inputLama].status)
+			valid := false
+			for !valid{
+				fmt.Println("📍 Status Proyek:")
+				fmt.Println("1. Pending")
+				fmt.Println("2. Sedang_dikerjakan")
+				fmt.Println("3. Selesai")
+				fmt.Print("Pilih Status (1-3) : ")
+				fmt.Scan(&status)
 
+				if status == 1{
+					A[inputLama].status = "Pending"
+					valid = true
+				} else if status == 2{
+					A[inputLama].status = "Sedang_dikerjakan"
+					valid = true
+				} else if status == 3{
+					A[inputLama].status = "Selesai"
+					valid = true
+				} else {
+					fmt.Println("❌ Pilihan tidak valid! Silakan masukkan ulang (1-3).")
+				}
+			}
 			fmt.Print("📆 Deadline (dd mm yyyy): ")
 			fmt.Scan(&A[inputLama].deadlineDay, &A[inputLama].deadlineMonth, &A[inputLama].deadlineYear)
 
-			fmt.Print("Masukan Bayaran: Rp")
+			fmt.Print("💰 Masukan Bayaran : Rp")
 			fmt.Scan(&A[inputLama].bayaran)
 		inputLama++
-	}
+		}
 	*n = inputBaru
 	fmt.Println("✅ Data proyek berhasil ditambahkan.\n\n")
 	} else{
@@ -115,6 +134,8 @@ func ReadData(A tabTrack, n int){
 
 func UpdateStatus(A *tabTrack, n int) {
 	var nama string
+	var status int
+	var valid bool = false
 	fmt.Print("Masukkan nama proyek yang ingin diubah statusnya: ")
 	fmt.Scan(&nama)
 
@@ -141,8 +162,27 @@ func UpdateStatus(A *tabTrack, n int) {
 
 			if sama {
 				fmt.Printf("Status saat ini: %s\n", A[i].status)
-				fmt.Print("Masukkan status baru: ")
-				fmt.Scan(&A[i].status)
+				for !valid{
+				fmt.Println("Ubah Status Proyek:")
+				fmt.Println("1. Pending")
+				fmt.Println("2. Sedang_dikerjakan")
+				fmt.Println("3. Selesai")
+				fmt.Print("Pilih Status (1-3) : ")
+				fmt.Scan(&status)
+
+				if status == 1{
+					A[i].status = "Pending"
+					valid = true
+				} else if status == 2{
+					A[i].status = "Sedang_dikerjakan"
+					valid = true
+				} else if status == 3{
+					A[i].status = "Selesai"
+					valid = true
+				} else {
+					fmt.Println("❌ Pilihan tidak valid! Silakan masukkan ulang (1-3).")
+				}
+			}
 				fmt.Println("✅ Status proyek telah diperbarui.")
 				found = true
 			}
