@@ -7,7 +7,7 @@ func main() {
 	var nData int
 	var Option int
 
-	for Option != 7 {
+	for Option != 8 {
 		Menu()
 		fmt.Print("Masukan Opsi: ")
 		fmt.Scan(&Option)
@@ -23,8 +23,10 @@ func main() {
 		case 5:
 			CariProyek(Data, nData)
 		case 6:
-			UrutkanProyek(&Data, &nData)
+			CariProyekByKlien(Data, nData)
 		case 7:
+			UrutkanProyek(&Data, &nData)
+		case 8:
 			fmt.Println("Program Selesai")
 		default:
 			fmt.Println("Opsi tidak valid, silahkan masukan ulang.")
